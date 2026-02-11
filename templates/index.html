@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Timetable Generator - Create Schedule{% endblock %}
+
+{% block content %}
+<div class="wizard-container">
+    <!-- Progress Indicator -->
+    <div class="progress-steps">
+        <div class="step active" id="step-indicator-1">
+            <div class="step-number">1</div>
+            <div class="step-label">Define Slot Table</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-indicator-2">
+            <div class="step-number">2</div>
+            <div class="step-label">Enter Courses</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" id="step-indicator-3">
+            <div class="step-number">3</div>
+            <div class="step-label">Generate Timetable</div>
+        </div>
+    </div>
+
+    <!-- Step 1: Slot Table Definition -->
+    <div class="wizard-step active" id="step-1">
+        <div class="card">
+            <div class="card-header">
+                <h2>Step 1: Define Your Slot Table</h2>
+                <p>Set up your weekly schedule structure</p>
+            </div>
+            <div class="card-body">
+                <form id="slot-table-form">
+                    <!-- Days Configuration -->
+                    <div class="form-group">
+                        <label for="num-days">Number of Working Days</label>
+                        <input type="number" id="num-days" min="1" max="7" value="5" required>
+                        <small>Specify how many days you have classes (excluding holidays)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Day Names</label>
+                        <div id="days-container" class="input-grid">
+                            <!-- Dynamically generated day inputs -->
+                        </div>
+                    </div>
+
+                    <!-- Time Periods Configuration -->
+                    <div class="form-group">
+                        <label for="num-periods">Number of Time Periods</label>
+                        <input type="number" id="num-periods" min="1" max="12" value="9" required>
+                        <small>Total time slots per day (including lunch/breaks)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time Periods (Format: 8-8:50)</label>
+                        <div id="periods-container" class="input-grid">
+                            <!-- Dynamically generated period inputs -->
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="build-grid-btn">
+                        Build Slot Grid
+                    </button>
+                </form>
+
+                <!-- Slot Grid Editor -->
+                <div id="slot-grid-section" style="display: none;">
+                    <div class="section-header">
+                        <h3>Assign Slot Labels</h3>
+                        <p>Enter slot labels in each cell (leave empty for breaks like lunch)</p>
+                    </div>
+
+                    <div class="grid-container">
+                        <div id="slot-grid" class="timetable-grid">
+                            <!-- Dynamically generated grid -->
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="edit-structure-btn">
+                            Edit Structure
+                        </button>
+                        <button type="button" class="btn btn-primary" id="save-slot-table-btn">
+                            Save Slot Table
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Course Entry -->
+    <div class="wizard-step" id="step-2">
+        <div class="card">
+            <div class="card-header">
+                <h2>Step 2: Enter Your Courses</h2>
+                <p>Add courses and assign their slot labels</p>
+            </div>
+            <div class="card-body">
+                <!-- Available Slots Reference -->
+                <div class="info-box">
+                    <h4>Available Slots</h4>
+                    <div id="available-slots" class="slot-chips">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <form id="courses-form">
+                    <div class="form-group">
+                        <label for="num-courses">Number of Courses</label>
+                        <input type="number" id="num-courses" min="1" max="20" value="5" required>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" id="generate-course-fields-btn">
+                        Generate Course Fields
+                    </button>
+
+                    <div id="courses-container" class="courses-list">
+                        <!-- Dynamically generated course inputs -->
+                    </div>
+
+                    <div class="form-actions" id="generate-actions" style="display: none;">
+                        <button type="button" class="btn btn-secondary" id="back-to-step1-btn">
+                            Back
+                        </button>
+                        <button type="button" class="btn btn-primary" id="generate-timetable-btn">
+                            Generate Timetable
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 3: Loading/Result (will redirect to timetable page) -->
+    <div class="wizard-step" id="step-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="loader"></div>
+                <h3>Generating Your Timetable...</h3>
+                <p>Please wait while we create your personalized schedule</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
+{% endblock %}

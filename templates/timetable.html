@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Your Timetable{% endblock %}
+
+{% block content %}
+<div class="timetable-container">
+    <div class="card">
+        <div class="card-header">
+            <div class="header-with-actions">
+                <div>
+                    <h2>📋 Your Generated Timetable</h2>
+                    <p id="timetable-summary">Loading timetable data...</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="window.location.href='/'">
+                        Create New
+                    </button>
+                    <button class="btn btn-primary" id="export-pdf-btn">
+                        📥 Export PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conflicts Warning -->
+        <div id="conflicts-section" style="display: none;">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div class="card-body">
+            <div class="timetable-wrapper">
+                <table id="timetable" class="timetable">
+                    <thead>
+                        <tr>
+                            <th class="time-header">Time / Day</th>
+                            <!-- Day headers will be added by JavaScript -->
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-body">
+                        <!-- Timetable rows will be added by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="card stats-card">
+        <div class="card-header">
+            <h3>📊 Schedule Statistics</h3>
+        </div>
+        <div class="card-body">
+            <div class="stats-grid" id="stats-grid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/timetable.js') }}"></script>
+{% endblock %}
